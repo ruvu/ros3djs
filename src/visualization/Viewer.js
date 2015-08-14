@@ -34,6 +34,7 @@ ROS3D.Viewer = function(options) {
     y : 3,
     z : 3
   };
+  var cameraZoomSpeed = options.cameraZoomSpeed || 0.5;
 
   // create the canvas to render to
   this.renderer = new THREE.WebGLRenderer({
@@ -58,7 +59,7 @@ ROS3D.Viewer = function(options) {
     scene : this.scene,
     camera : this.camera
   });
-  this.cameraControls.userZoomSpeed = 0.5;
+  this.cameraControls.userZoomSpeed = cameraZoomSpeed;
 
   // lights
   this.scene.add(new THREE.AmbientLight(0x555555));
@@ -121,4 +122,16 @@ ROS3D.Viewer.prototype.addObject = function(object, selectable) {
   } else {
     this.scene.add(object);
   }
+};
+
+/**
+ * Resize 3D viewer
+ *
+ * @param width - new width value
+ * @param height - new height value
+ */
+ROS3D.Viewer.prototype.resize = function(width, height) {
+  this.camera.aspect = width / height;
+  this.camera.updateProjectionMatrix();
+  this.renderer.setSize(width, height);
 };
